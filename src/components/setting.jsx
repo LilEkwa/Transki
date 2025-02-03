@@ -3,7 +3,7 @@ import profile from '../assets/profil.jpg'
 import {Icon} from 'react-icons-kit';
 import {eyeOff} from 'react-icons-kit/feather/eyeOff';
 import {eye} from 'react-icons-kit/feather/eye'
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/setting.css"
 
@@ -12,19 +12,29 @@ function Setting(){
     const [type, setType] = useState('password');
     const [icon, setIcon] = useState(eyeOff);
     const [confirmedPassword, setConfirmedPassword] = useState("");
-    const inputRef = useRef(null);
-    const [image, setImage] = useState("");
-
-
-    const handleImageClick = () =>{
-      inputRef.current.click();
-    }
-
-    const handleImageChange = (e) => {
-      const file = e.Target.files[0];
-      console.log(file);
-      setImage(e.Target.files[0]);
-    }
+    const [profilePicture, setProfilePicture] = useState(null);
+    const [preview, setPreview] = useState(null);
+  
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        setProfilePicture(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      // Ici, vous pouvez envoyer la photo de profil à votre backend
+      console.log('Photo de profil à envoyer:', profilePicture);
+      // Réinitialiser le formulaire après soumission
+      setProfilePicture(null);
+      setPreview(null);
+    };
     
     const handleToggle = () => {
         if (type==='password'){
@@ -107,22 +117,24 @@ function Setting(){
         <section className='home-section'>
           <div className='login'>
           <div className='login2'>
-            <div className="container">
+            <div className="container">   
           <div className="content">
-          <div onClick={handleImageClick}>
-         {image ? (<img src={URL.createObjectURL(image)} 
-              alt='profil'
-              className='prof'
-              />) : (<img src={profile} alt='profil' className='prof' />)}
-              <input
-                type='file'
-                ref={inputRef}
-                onChange={handleImageChange}
-                style={{display: "none"}}
-              />
-              </div>
-            <form action="#">
-    <p className="txt text-slate-950 mb-6">
+          <div>
+        <label htmlFor="profile-picture">Changer la photo de profil</label>
+        <input
+          type="file"
+          id="profile-picture"
+          accept="image/*"
+          onChange={handleFileChange}
+       />
+      </div>
+      {preview && (
+        <div>
+          <img src={preview} alt="Aperçu de la photo de profil" style={{ width: '150px', height: '150px', borderRadius: '50%' }} />
+        </div>
+      )} 
+           <form onSubmit={handleSubmit}>
+      <p className="txt text-slate-950 mb-6">
      Modifier vos informations
     </p>
               <div className="input-box">
@@ -152,10 +164,10 @@ function Setting(){
               <div className="input-box">
                 <input type="submit" value="Modifier" />
               </div>
-            </form>
+    </form>
           </div>
           </div>
-    </div>
+          </div>
     </div>
     </section>    
     </>
@@ -177,8 +189,38 @@ export default Setting;
                  Modifier vos informations
                </p>
               </div> */}
-    //           <section className="home-section">
+    {/* //           <section className="home-section">
     //   <div className="text">
     //     <i className='fa-solid fa-gear mr-2'></i>
     //         Reglages
     // </div>
+    <p className="txt text-slate-950 mb-6">
+     Modifier vos informations
+    </p>
+              <div className="input-box">
+                <input type={type} 
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required />
+                <span className="flex justify-around items-center" onClick={handleToggle}>
+                <Icon className="absolute right-3 top-3 text-gray-600" icon={icon} size={18}/>
+            </span>
+                <label>Mot de passe </label>
+              </div>
+              <div className="input-box">
+               <input type={type} 
+               name="confirmedPassword"
+               value={confirmedPassword}
+               onChange={(e) => setConfirmedPassword(e.target.value)}
+               autoComplete="current-password"
+               required />
+               <span className="flex justify-around items-center" onClick={handleToggle}>
+               <Icon className="absolute right-3 top-3 text-gray-600" icon={icon} size={18}/>
+           </span>
+               <label>Confirmez le mot de passe </label>
+             </div>
+              <div className="input-box">
+                <input type="submit" value="Modifier" />
+              </div> */}

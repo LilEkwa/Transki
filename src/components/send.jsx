@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import logo from '../assets/K_Logo.png'
 import pdf from '../assets/pdf.png'
 import txt from '../assets/sms.png'
+import jpg from '../assets/jpg.png'
+import doc from '../assets/doc.png'
 import "../styles/send.css"
 
 
@@ -29,10 +31,12 @@ function Send() {
       case "jpg":
       case "jpeg":
       case "png":
-        return "🖼";
+        return<img src={jpg}
+        style={{width: '50px'}}/>;
       case "doc":
       case "docx":
-        return "📝";
+        return <img src={doc}
+        style={{width: '50px'}}/>;
         case "txt":
           return <img src={txt}
           style={{width: '50px'}}/>
